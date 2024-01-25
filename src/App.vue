@@ -5,6 +5,9 @@
       <ApplicationTab title="Scrapers">
         <ScrapersPage></ScrapersPage>
       </ApplicationTab>
+      <ApplicationTab title="Monitors">
+        <ScrapersPage></ScrapersPage>
+      </ApplicationTab>
       <ApplicationTab title="Raffles">
         <div class="row">
           <div class="col-md-7"><h2>Raffles</h2></div>

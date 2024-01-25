@@ -20,16 +20,21 @@ const scraper_profiles =  ref([
 ]);
 //
 const dropdownItems = ref([
-  { label: 'Add Scraper', value: '1' },
-  { label: 'Option 2', value: '2' },
+  {label: 'Web Scraper', value: '1', loc: "#scraperModal", tog: "modal"},
+  {label: 'API Scraper', value: '2', loc: "#scraperModal", tog: "modal"},
   // ... other items
 ]);
 
+const possibleModals = ref(["add_web_scraper", "add_api_scraper"]);
+
+const modalOpen = ref(possibleModals.value[0]);
 const handleSelect = (item) => {
-  console.log('Selected item:', item);
+  // if (item.hasOwnProperty("modal_name")) {
+  //
+  // }
+    console.log('Selected item:', item, typeof item);
 };
 
-const modalOpen = ref({addApi: false, addReg: false, edit: false, copy: false, runPre: false})
 
 // const currentOpen = ref([]);
 
@@ -39,18 +44,18 @@ const modalOpen = ref({addApi: false, addReg: false, edit: false, copy: false, r
   <div class="row" id="scrapers-tab">
     <div class="col-md-7"><h2>Data Scrapers</h2></div>
     <div class="col-md-5">
-      <div class="btn-group">
-        <DropdownButton id="addNewScraperDropdownButton" title="Add" :items="dropdownItems" @select="handleSelect"></DropdownButton>
-      </div>
+      <DropdownButton
+          id="addNewScraperDropdownButton"
+          title="Add"
+          :items="dropdownItems"
+          @select="handleSelect">
+      </DropdownButton>
     </div>
   </div>
   <table class="table table-hover">
     <thead>
       <tr>
-        <th scope="col">Scraper Name</th>
-        <th scope="col">Type</th>
-        <th scope="col">Status</th>
-        <th scope="col">Options</th>
+        <th scope="col">Scraper Name</th><th scope="col">Type</th><th scope="col">Status</th><th scope="col">Options</th>
       </tr>
     </thead>
     <tbody>
@@ -65,59 +70,39 @@ const modalOpen = ref({addApi: false, addReg: false, edit: false, copy: false, r
   </table>
   <div class="modal fade" id="scraperModal" tabindex="-1" aria-labelledby="scraperForm" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-fullscreen-lg-down">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addScraperFormModal">{{ modalCurrentTitle }}</h5>
-          <button type="button" class="btn-close" aria-label="Close" data-dismiss="modal"></button>
-        </div>
-        <div id="scraperModalContent">
+      <div id="scraperModalContent">
+      <div class="modal-content" v-if="modalOpen === possibleModals[0]">
+          <div class="modal-header" >
+            <h5 class="modal-title" id="scraperFormTitle">Add A Scraper Process</h5>
+            <button type="button" class="btn-close" aria-label="Close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+      <!--      <div class="row">-->
+      <!--        <div class="col-12">-->
+      <!--          <label>Scraper Name</label>-->
+      <!--          <input class="form-control-sm form-control" v-model.trim="scraperName">-->
+      <!--          <label>URL Groups</label>-->
+      <!--          &lt;!&ndash; URLS, Labels (i.e. Categories, Tags, Attributes), &ndash;&gt;-->
+      <!--          <label>First Scrape Objects</label>-->
+      <!--          <label>Secondary Scrape Objects</label>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <!--      <button type="button" class="btn btn-primary" @click="saveScraper()">Save changes</button>-->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary">Close</button>
+          </div>
+
+
+
+
         </div>
       </div>
     </div>
   </div>
 
-  <Teleport v-if="modalOpen.addApi[0]" to="#scraperModalContent">
-    <div class="modal-header">
-      <h5 class="modal-title" id="addScraperFormModal">Add A Scraper Process</h5>
-      <button type="button" class="btn-close" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-12">
-          <label>Scraper Name</label>
-          <input class="form-control-sm form-control" v-model.trim="scraperName">
-          <label>Scraper Name</label>
-          <label>Scraper Name</label>
-          <label>Scraper Name</label>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary" @click="saveScraper()">Save changes</button>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary">Close</button>
-    </div>
+  <Teleport to="scraperModal">
   </Teleport>
-  <div v-else-if="modalOpen.addReg[0]">
-    <div class="modal-header">
-      <h5 class="modal-title" id="addScraperFormModal">Add A Scraper Process</h5>
-      <button type="button" class="btn-close" aria-label="Close"></button>
-    </div>
-    <div class="modal-body">
-      <div class="row">
-        <div class="col-12">
-          <label>Scraper Name</label>
-          <input class="form-control-sm form-control" v-model.trim="scraperName">
-          <label>Scraper Name</label>
-          <label>Scraper Name</label>
-          <label>Scraper Name</label>
-        </div>
-      </div>
-      <button type="button" class="btn btn-primary" @click="saveScraper()">Save changes</button>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-secondary">Close</button>
-    </div>
-  </div>
 
 <!--  <AddScraper id="addScraper"></AddScraper>-->
 </template>

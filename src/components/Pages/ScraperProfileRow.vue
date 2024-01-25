@@ -1,6 +1,7 @@
 <script setup>
 import {getCurrentInstance, ref} from "vue";
 const component = getCurrentInstance();
+const scraperId = component.vnode.key;
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
   name: {type: String, required: true},
@@ -34,7 +35,8 @@ const runScraperEvent = ref(async function() {
       //todo: check last run.
       clearTimeout(someInterval);
     } else if (i === 3) {
-      i = 0;iters++;
+      i = 0;
+      iters++;
       if (iters >= 3) {
         disabledButtons.value.run = false
         currentlyRunning.value = false
@@ -44,14 +46,18 @@ const runScraperEvent = ref(async function() {
   }, 1000);
 });
 
+const copyScraper = ref(function () {
+  alert(`Copy the scraper with id ${scraperId}`)
+})
+
 let boundHtml = ref(RunningAbility['waiting']);
 const currentlyRunning = ref(props.isRunning);
 if (currentlyRunning.value === true) {
   runScraperEvent.value();
 }
 
-const currentCollapseOpen = ref(false);
-const inTransition = ref(false);
+// const currentCollapseOpen = ref(false);
+// const inTransition = ref(false);
 
 const stopScrapeEvent = ref(async function() {
   // console.log("Some timeout event");
@@ -65,7 +71,7 @@ const stopScrapeEvent = ref(async function() {
 
 <template>
 <tr>
-  <td>{{component.vnode.key}} - {{name}}</td>
+  <td>{{name}}</td>
   <td></td>
   <td>
     <span class="scraper-run-not-running" v-if="currentlyRunning !== true">
@@ -80,13 +86,13 @@ const stopScrapeEvent = ref(async function() {
   </td>
   <td>
     <div class="btn-group">
-     <button class="btn btn-primary" :disabled="disabledButtons.edit">Edit</button>
-     <button class="btn btn-success click-to-open-runs"  :disabled="disabledButtons.runs">Runs</button>
-     <button class="btn btn-info" :disabled="disabledButtons.copy"><i class="fa fa-copy"></i></button>
+     <button class="btn btn-outline-secondary" :disabled="disabledButtons.edit">Edit</button>
+     <button class="btn btn-outline-secondary click-to-open-runs" :disabled="disabledButtons.runs">Runs</button>
+     <button class="btn btn-outline-info" @click="copyScraper()" :disabled="disabledButtons.copy"><i class="fa fa-copy"></i></button>
     </div>
   </td>
 </tr>
-<div class="row" :class="{show: currentCollapseOpen, collapse: !inTransition, collapsing: inTransition}">
+<tr>
 
-</div>
+</tr>
 </template>
