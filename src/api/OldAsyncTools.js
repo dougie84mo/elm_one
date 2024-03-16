@@ -72,21 +72,13 @@ export const PUPME = {
 
 
 export class GmgBrowser {
-
-
     static launchOpts (headless=true) {
-        return {
-            headless: headless,
-            ignoreHTTPSErrors: true,
-            defaultViewport: null,
-        }
-
+        return {headless: headless, ignoreHTTPSErrors: true, defaultViewport: null}
     }
 
-    static async basic_launch(opts) {
+    static async basicLaunch(opts) {
         const browser = await puppeteer.launch(opts);
-        const page = await browser.newPage();
-        return page;
+        return await browser.newPage();
     }
 
     static browser_args(proxy_name = null) {
@@ -321,9 +313,38 @@ export class Gmg_Async {
         return Gmg_Async.sanitize(value, sanitizations);
     }
 
-    static async getAttr(el, sel, type) {
+    static async getAttr(el, sel, type, sanitizations = ["trim"]) {
         let tempEl = sel === "self" ? el : await el.$(sel);
-        return  await tempEl.evaluate((element, s) => element.getAttribute(s), type);
+        let value = await tempEl.evaluate((element, s) => element.getAttribute(s), type)
+        return Gmg_Async.sanitize(value, sanitizations);
+    }
+
+    static sanitize(value, sanitizations=["trim"]) {
+        if ((value === null || value === undefined) || typeof value !== "string") {
+            console.log(value);
+        } else {
+            if (sanitizations.length > 0) {
+                for (let i in sanitizations) {
+                    let s = sanitizations[i];
+                    // console.log(s.indexOf("remove"));
+                    if (s.indexOf("remove") === 0) {
+                        let rstring = s.split("::");
+                        value = value.replace(rstring[1], "");
+                    } else if (s.indexOf("prepend") === 0) {
+                        let rstring = s.split("::");
+                        value = rstring[1] + value;
+                    } else if (SAN.hasOwnProperty(s)) {
+                        value = SAN[s](value);
+                    }
+                }
+            }
+
+        }
+
+
+        //#ember2248 > div > div
+
+        return value;
     }
 
     static capital (v) {
@@ -331,6 +352,141 @@ export class Gmg_Async {
     }
 
 
+    static async asyncStringify(content) {
+        return JSON.stringify(content);
+    }
+
+    static promStringify(content) {
+        return new Promise((resolve, reject) => {
+            resolve(JSON.stringify(content));
+        });
+    }
+
+    static promParse(str) {
+        return new Promise((resolve, reject) => {
+            resolve(JSON.parse(str));
+        });
+    }
+
+    static async createDir (d) {
+        try {
+            await fs.mkdir(d);
+        } catch (e) {
+            console.log(`The directory ${d} was probably already created`);
+        }
+    }
+
+
+    static async createDirCheck (d) {
+        try {
+            await fs.mkdir(d);
+        } catch (e) {
+            console.log(`The directory ${d} was probably already created`);
+            return false;
+        }
+        return true;
+    }
+
+    static async _streamImageToDisk(url, filePath, proxy=false) {
+        const writer = createWriteStream(filePath)
+
+        const response = await Axios({
+            url,
+            method: 'GET',
+            responseType: 'stream'
+        });
+
+        if (response.status !== 404) {
+            await Gmg_Async.s(2000);
+
+            response.data.pipe(writer);
+
+        }
+
+        return new Promise((resolve, reject) => {
+            response.data.on('end', resolve)
+            response.data.on('error', reject)
+        });
+
+    }
+
+
+
+
+
+
+    static async createAsyChoiceList(questionStr, choices, allowMultipleChoices = false) {
+        let s = questionStr + "\n\r";
+        choices.forEach(function (i, a) {
+            s += `[${a + 1}] ${i}\n\r`;
+        });
+        s += "[0] CANCEL\n\r";
+
+        let answer = null;
+
+        if (allowMultipleChoices) {
+            answer = [];
+            while (answer.length <= 0) {
+                let a = await rl.question(s);
+                let a_arr = a.split(",")
+                // console.log(a);
+                for (const aArrKey in a_arr) {
+                    let actualValue = parseInt(aArrKey) - 1
+                    if (actualValue === -1) {
+                        process.exit(1);
+                    } else if (actualValue >= 0 && choices.length >= actualValue) {
+                        answer.push(choices[actualValue]);
+                    }
+                }
+            }
+        } else {
+
+            while (!answer) {
+                let a = await rl.question(s);
+                // console.log(a);
+                let actualValue = parseInt(a) - 1
+                if (actualValue === -1) {
+                    process.exit(1);
+                } else if (actualValue >= 0 && choices.length >= actualValue) {
+                    answer = choices[actualValue];
+                }
+            }
+        }
+
+        return answer;
+
+    }
+
+    static async confirmRequest(confirmationString) {
+        let s = confirmationString + "\n\r[1]YES\n\r[0] NO\n\r";
+        let answer = null;
+        while (answer !== 1 || answer !== 0) {
+            let a = await rl.question(s);
+            // console.log(a);
+            if (a >= 0) {
+                answer = a;
+            } else {
+                process.exit(1);
+            }
+        }
+
+        return answer;
+
+    }
+
+    static async confirmText(confirmationString) {
+        let s = confirmationString ;
+        let answer = null;
+        while (answer !== "" || answer !== null) {
+            let a = await rl.question(s);
+            let areYouSure = `Are you sure you want your answer to be: ${a}`;
+            // console.log(a);
+            if (await Gmg_Async.confirmRequest(areYouSure)) {
+                answer = a;
+            }
+        }
+        return answer;
+    }
 
     async convertProductsJsonToCsv(name, products, sanitizerFields = ["short_description", "description", "tags"]) {
         //sanatizerFields of new test
@@ -370,58 +526,5 @@ export const SANITIZE = {
             .replaceAll("[", "")
             .replaceAll("]", "")
             .replaceAll(" ", "");
-    }
-}
-
-export const ASYNC_PARSE = {
-    "json": async (str) => JSON.parse(str)
-}
-
-export const TEMPUS = {
-    "S": (seconds) => {new Promise(r => setTimeout(r, 1000*seconds))},
-    "MS": (milliseconds) => {new Promise(r => setTimeout(r, milliseconds))},
-    "NowSecond": () => Date.now(),
-    "NowMilliSeconds": () => Math.floor(Date.now() /1000),
-    "TimestampSeconds": (t) => Date.now() - t,
-    "TimestampMilliseconds": (t) => Math.floor(Date.now() /1000) - t,
-}
-
-export const GOINGTOPROM = {
-    "GenerateKey": (isCrypto = true) => {
-        return new Promise((resolve) => {
-            let num = isCrypto
-                ? crypto.randomBytes(16).toString("base64")
-                : Math.random().toString(36).substring(2, 9);
-            resolve(num);
-        })
-    },
-    "ReadFileToJson" : async (filePathName) => {
-        let fileContents = await fs.readFile(filePathName);
-        return JSON.parse(fileContents);
-    },
-    "WriteToFile": async (content, filePathName) => {
-
-        // console.log(typeof content);
-        if (typeof content === "object") {
-            console.log("Is Object")
-            content = JSON.stringify(content);
-        }
-        await fs.writeFile(filePathName, content);
-    },
-    "StreamImageToDisk": async (url, filePath) => {
-        const writer = createWriteStream(filePath),
-            responseOptions = {url, method: 'GET', responseType: 'stream'},
-            response = await Axios(responseOptions);
-
-        if (response.status !== 404) {
-            await TEMPUS.S(2);
-            response.data.pipe(writer);
-        }
-
-        return new Promise((resolve, reject) => {
-            response.data.on('end', resolve);
-            response.data.on('error', reject);
-        });
-
     }
 }

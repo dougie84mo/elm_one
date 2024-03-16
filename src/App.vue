@@ -3,29 +3,16 @@
   <div class="container-fluid m-2">
   <ApplicationTabs>
       <ApplicationTab title="Scrapers">
-        <ScrapersPage></ScrapersPage>
+        <Suspense>
+          <ScrapersPage></ScrapersPage>
+        </Suspense>
       </ApplicationTab>
+
       <ApplicationTab title="Monitors">
-        <ScrapersPage></ScrapersPage>
+        <MonitorsPage></MonitorsPage>
       </ApplicationTab>
       <ApplicationTab title="Raffles">
-        <div class="row">
-          <div class="col-md-7"><h2>Raffles</h2></div>
-          <div class="col-md-5">
-            <div class="btn-group">
-              <button class="btn btn-success">Add</button>
-              <button class="btn btn-secondary">Edit</button>
-            </div>
-          </div>
-        </div>
-        <table>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </table>
+        <RafflesPage></RafflesPage>
       </ApplicationTab>
       <ApplicationTab title="Proxies">
         <div class="row">
@@ -54,14 +41,16 @@
 </template>
 
 <script>
-import ApplicationTab from "@/components/ApplicationTab.vue";
-import ApplicationTabs from "@/components/ApplicationTabs.vue";
-import SettingsPage from "@/components/Pages/SettingsPage.vue";
-import ScrapersPage from "@/components/Pages/ScrapersPage.vue";
+import ApplicationTab from "@/Components/ApplicationTab.vue";
+import ApplicationTabs from "@/Components/ApplicationTabs.vue";
+import SettingsPage from "@/Pages/SettingsPage.vue";
+import ScrapersPage from "@/Pages/ScrapersPage.vue";
+import RafflesPage from "@/Pages/RafflesPage.vue";
+import MonitorsPage from "@/Pages/MonitorsPage.vue";
 
 // const ActiveTabs = [true, false, false];
 export default {
-  components: {ScrapersPage, SettingsPage, ApplicationTab, ApplicationTabs}
+  components: {MonitorsPage, RafflesPage, ScrapersPage, SettingsPage, ApplicationTab, ApplicationTabs}
 }
 </script>
 

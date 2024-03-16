@@ -6,9 +6,7 @@
         :key='tab'
         @click="selectedTab = tab"
     >
-      <a class="nav-link" href="#{{ tab }}" :class="{active: selectedTab === tab}">
-        {{ tab }}
-      </a>
+      <a class="nav-link" href="#{{ tab }}" :class="{active: selectedTab === tab}">{{ tab }}</a>
     </li>
   </ul>
   <slot></slot>
@@ -17,7 +15,7 @@
 
 <script setup>
 import {provide, ref, useSlots} from "vue";
-// import {SettingsHandler} from "@/scraper/ConfigurationHandler";
+// import {SettingsHandler} from "@/api/ConfigurationHandler";
 // let defSelectedTab = "Profiles";
 
 // eslint-disable-next-line no-undef

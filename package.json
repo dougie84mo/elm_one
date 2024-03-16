@@ -1,6 +1,6 @@
 {
   "name": "vue-electron-elm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
@@ -19,6 +19,7 @@
     "bootstrap": "^5.3.2",
     "bootstrap-vue": "^2.23.1",
     "core-js": "^3.8.3",
+    "nanoid": "^5.0.5",
     "puppeteer": "^21.5.2",
     "puppeteer-extra": "^3.3.6",
     "vue": "^3.2.13",
@@ -34,7 +35,8 @@
     "electron-devtools-installer": "^3.1.0",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
-    "vue-cli-plugin-electron-builder": "~2.1.1"
+    "vue-cli-plugin-electron-builder": "~2.1.1",
+    "vue-eslint-parser": "^9.4.2"
   },
   "eslintConfig": {
     "root": true,

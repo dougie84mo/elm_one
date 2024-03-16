@@ -24,3 +24,8 @@ pnpm-debug.log*
 
 #Electron-builder output
 /dist_electron
+
+/assets/configs/monitors/*
+/assets/configs/profiles/*
+/assets/configs/proxies/*
+/assets/runs/*

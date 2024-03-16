@@ -2,12 +2,16 @@
 import {getCurrentInstance, ref} from "vue";
 const component = getCurrentInstance();
 const scraperId = component.vnode.key;
+console.log(scraperId);
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
   name: {type: String, required: true},
-  isRunning: {type: [Boolean, String], required: true, default: false},
+  isRunning: {type: [Boolean, String], default: false},
   scraper: {type: [Object], required: true}
 });
+
+// eslint-disable-next-line no-undef,vue/valid-define-emits
+const emit = defineEmits(['handleEditSelect', 'copyScraperPrompt']);
 
 const disabledButtons = ref({run: false, stop: false, runs: false, edit: false, copy: false});
 
@@ -21,8 +25,9 @@ const RunningAbility = {
   'waiting': '<i class="fa fa-clock"></i>',
 };
 
-const runScraperEvent = ref(async function() {
-  // TODO: Start the process of running the scraper
+
+const runScraperEvent = ref( function() {
+  // TODO: Start the process of running the api
   disabledButtons.value.run = true;
   currentlyRunning.value = true;
   // Should also disable the edit button ???
@@ -65,6 +70,12 @@ const stopScrapeEvent = ref(async function() {
   currentlyRunning.value = false;
 });
 
+const handleEditSelect = function () {
+  let value = props.scraper.type === 0 ? 'add_web_scraper' : "add_api_scraper";
+  // console.log(scraperId);
+  emit('handleEditSelect', {value}, scraperId)
+};
+
 // provide('currentModal', currentModalOpen);
 
 </script>
@@ -86,7 +97,7 @@ const stopScrapeEvent = ref(async function() {
   </td>
   <td>
     <div class="btn-group">
-     <button class="btn btn-outline-secondary" :disabled="disabledButtons.edit">Edit</button>
+     <button class="btn btn-outline-secondary" data-bs-target="#scraperModal" data-bs-toggle="modal" :disabled="disabledButtons.edit" @click="handleEditSelect()">Edit</button>
      <button class="btn btn-outline-secondary click-to-open-runs" :disabled="disabledButtons.runs">Runs</button>
      <button class="btn btn-outline-info" @click="copyScraper()" :disabled="disabledButtons.copy"><i class="fa fa-copy"></i></button>
     </div>
