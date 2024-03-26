@@ -201,67 +201,6 @@ export class ConfigHandler extends FileParsingHandler{
 
 }
 
-export const DEFAULT_FIELDS = {
-    'message': (tone = -2, msg='') => {return {tone, msg};},
-    'scraperFields': {'htmlFields': [], 'attrFields': [], 'fileFields': []},
-    'secondScrapeOptions': {'scraperId': null, 'scraperUrlValue': '', 'isSecondaryScraper': false},
-    'scraperUrl': (urls="https://", tags="") => { return {urls, tags};},
-    'tags': (tagName="", tagType=0, tagValueCss="") => { return {tagName, tagType, tagValueCss};},
-}
-export const DEFAULT_OBJS = {
-    'WebScraper': {
-        name: 'New Scraper',
-        type: 0,
-        baseUrl: "https://",
-        websiteName: "",
-        scrapeContainer: "",
-        scrapeGeneralTags : [DEFAULT_FIELDS.tags()],
-        scraperUrls : [DEFAULT_FIELDS.scraperUrl()],
-        secondaryScrape: DEFAULT_FIELDS.secondScrapeOptions
-    },
-    'ApiScraper': {
-        name: 'New Api Scraper',
-        type: 1,
-        apiUrl: "https://",
-        apiToken: "",
-        lookupParams: [],
-        scrapeGeneralTags : [DEFAULT_FIELDS.tags()],
-        secondaryScrape: DEFAULT_FIELDS.secondScrapeOptions
-    }
-}
-
-export const URL_TABLE = (scraper) => {
-    return {
-        add: (i) => {
-            scraper.scraperUrls.splice(++i, 0, DEFAULT_FIELDS.scraperUrl());
-        },
-        remove: (i) => {
-            if (scraper.scraperUrls.length > 1) scraper.scraperUrls.splice(i, 1);
-        },
-        duplicate: (i, fields) => {
-            i++;scraper.scraperUrls.splice(i, 0, fields);
-        }
-    };
-}
-
-export const UTILITIES = {
-    "DROP": (label, value, loc) => {return {label, value, loc, tog:"modal"};}
-}
-
-export const SCRAPER_TAG_TABLE = (scraper) => {
-    return {
-        add: (i) => {
-            scraper.scrapeGeneralTags.splice(++i, 0, DEFAULT_FIELDS.tags());
-        },
-        remove: (i) => {
-            if (scraper.scrapeGeneralTags.length > 1) scraper.scrapeGeneralTags.splice(i, 1);
-        },
-        duplicate: (i, fields) => {
-            console.log(fields);
-            i++;scraper.scrapeGeneralTags.splice(i, 0, fields);
-        }
-    };
-}
 
 //
 // export const MSG = () => {

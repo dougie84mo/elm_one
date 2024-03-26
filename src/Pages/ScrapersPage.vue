@@ -1,12 +1,13 @@
 <script setup>
 import ScraperProfileRow from "@/Pages/PageComponents/ScraperProfileRow.vue";
-import {ref} from "vue";
+import {customRef, ref} from "vue";
 import DropdownButton from "@/Components/Reusables/DropdownButton.vue";
 // import {TESTS} from "@/api/ElmUtil";
 
 import WebScraperForm from "@/Components/Forms/Modals/WebScraperForm.vue";
 import AddAPIScraper from "@/Components/Forms/Modals/AddAPIScraper.vue";
 import {FileHandler} from "@/api/FileTools";
+import WebScraperRunForm from "@/Components/Forms/Modals/WebScraperRunForm.vue";
 // import {BasicFileHandler} from "@/api/AsyncTools";
 let currentScraperConfig =  [];
 let currentId = ref(0);
@@ -33,6 +34,7 @@ const handleSelect = (item, current=0) => {
   currentId.value = current;
 };
 
+// TODO : Add Runs View Modal, Add Current Run Data View
 
 </script>
 
@@ -61,11 +63,18 @@ const handleSelect = (item, current=0) => {
 
         <div class="modal-content" v-if="modalOpen === possibleModals[0]">
           <Suspense>
-            <WebScraperForm :scraper-profiles="currentScraperConfig" :sid="currentId"></WebScraperForm>
+            <WebScraperForm :sid="currentId"></WebScraperForm>
           </Suspense>
         </div>
         <div class="modal-content" v-else-if="modalOpen === possibleModals[1]">
-          <AddAPIScraper></AddAPIScraper>
+          <Suspense>
+            <AddAPIScraper></AddAPIScraper>
+          </Suspense>
+        </div>
+        <div class="modal-content" v-else-if="modalOpen === possibleModals[2]">
+          <Suspense>
+            <WebScraperRunForm :r-scrape-id="currentId"></WebScraperRunForm>
+          </Suspense>
         </div>
       </div>
     </div>

@@ -6,7 +6,9 @@
         :key='tab'
         @click="selectedTab = tab"
     >
-      <a class="nav-link" href="#{{ tab }}" :class="{active: selectedTab === tab}">{{ tab }}</a>
+      <a class="nav-link" href="#{{ tab }}" :class="{active: selectedTab === tab}">
+        {{ tab }}
+      </a>
     </li>
   </ul>
   <slot></slot>
@@ -19,13 +21,13 @@ import {provide, ref, useSlots} from "vue";
 // let defSelectedTab = "Profiles";
 
 // eslint-disable-next-line no-undef
-// const props = defineProps({
-//
-// });
+// TODO: Some notification system
+//  <span class="badge bg-primary">4</span>
 
 const slots = useSlots();
 const tabTitles = ref(slots.default().map((tab) => tab.props.title));
 const selectedTab = ref(tabTitles.value[0]);
 
 provide("selectedTab", selectedTab);
+
 </script>

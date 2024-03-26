@@ -67,7 +67,7 @@ const stopRun = ref(() => {
           <thead><tr><th>Tag Type</th><th>Tag Name</th><th>Tag Value</th><th>Options</th></tr></thead>
           <tbody>
             <TagUrlRow
-                v-for="(item, index) in webScraper.scrapeGeneralTags"
+                v-for="(item, index) in webScraper.scraperTags"
                 v-model:tag-type="item.tagType"
                 v-model:tag-name="item.tagName"
                 v-model:tag-value-css="item.tagValueCss"

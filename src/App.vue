@@ -7,12 +7,17 @@
           <ScrapersPage></ScrapersPage>
         </Suspense>
       </ApplicationTab>
-
       <ApplicationTab title="Monitors">
         <MonitorsPage></MonitorsPage>
       </ApplicationTab>
       <ApplicationTab title="Raffles">
         <RafflesPage></RafflesPage>
+      </ApplicationTab>
+      <ApplicationTab title="Runs">
+        Runs Page
+      </ApplicationTab>
+      <ApplicationTab title="Tasks">
+        Tasks
       </ApplicationTab>
       <ApplicationTab title="Proxies">
         <div class="row">
@@ -40,7 +45,7 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import ApplicationTab from "@/Components/ApplicationTab.vue";
 import ApplicationTabs from "@/Components/ApplicationTabs.vue";
 import SettingsPage from "@/Pages/SettingsPage.vue";
@@ -49,9 +54,10 @@ import RafflesPage from "@/Pages/RafflesPage.vue";
 import MonitorsPage from "@/Pages/MonitorsPage.vue";
 
 // const ActiveTabs = [true, false, false];
-export default {
-  components: {MonitorsPage, RafflesPage, ScrapersPage, SettingsPage, ApplicationTab, ApplicationTabs}
-}
+//
+// export default {
+//   components: {MonitorsPage, RafflesPage, ScrapersPage, SettingsPage, ApplicationTab, ApplicationTabs}
+// }
 </script>
 
 <style>
