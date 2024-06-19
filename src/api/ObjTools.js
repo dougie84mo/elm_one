@@ -1,78 +1,94 @@
 export const DEFAULT_FIELDS = {
+    "def": {"_n": "", "_i": ""},
+    "html": {"_n": "", "_i": ""},
+    "text": {"_n": "", "_i": ""},
+    "attr": {"_n": "", "_i": "", "_attr": ""},
+    "param": {"_n": "", "_i": "", "_val": ""},
+    "input": {"_n": "", "_i": "", "_param": {}},
+    "buttonClick": {"_n": "", "_i": ""},
+    "scroll": {"_n": "", "_i": ""}
+}
+
+export const DEFAULT_ITEMS = {
     's': (tone = -2, msg='') => {return {tone, msg};},
     'message': (tone = -2, msg='') => {return {tone, msg};},
-    'scraperFields': {'htmlFields': [], 'attrFields': [], 'fileFields': []},
-    'secondScrapeOptions': {'scraperId': null, 'scraperUrlValue': '', 'isSecondaryScraper': false},
-    'scraperUrl': (urls="https://", tags="") => { return {urls, tags};},
     'tags': (tagName="", tagType=0, tagValueCss="") => { return {tagName, tagType, tagValueCss};},
+    "actionNames": ["Initializer", "Monitor", "Scraper", "Raffle"],
+    'taskType': {"Initialization": 0, "Monitor": 1, "Scraper": 2, "Raffle": 3},
+    "actionTypeData": [
+        {urls : "https://", tags: ""},
+        {tagName: "", tagType: "", tagValueCss: ""},
+        {tagName: "", tagType: "", tagValueCss: ""},
+        {tagName: "", tagType: "", tagValueCss: ""},
+    ],
+    'requestType': {"Api": 0, "Web": 1},
+    "runGroups": [],
+    "profilingTypeData": [
+        {profileName : "", profile: {}},
+        {proxiesGroupName: "", "proxiesFile": "", proxyArray: []},
+        {profileGroup: "",proxyArray: []},
+    ],
+    "loginParams": {0: "", "usernameField": "", "passwordField": "", "submitField": ""},
 }
+
+
+
+
+export const TABLE_RULE = (taction) => {
+    return {
+        addUrlTag: (i) => {
+            const l = ++i;
+            taction.taskActionData.splice(l, 0, DEFAULT_ITEMS.actionTypeData[0]);
+        },
+        remove: (i) => {
+            if (taction.taskActionData.length > 1) taction.taskActionData.splice(i, 1);
+        },
+        duplicate: (i, fields) => {
+            i++;taction.taskActionData = taction.taskActionData.splice(i, 0, fields);
+        }
+    };
+}
+
+
 export const DEFAULT_OBJS = {
-    'RunScraper': {
-        name: "Full Scrape",
+    'RunTaskStaticGroup': {
         id: "",
-        scraperTags: [],
-        scraperUrls: [],
-        firstScraperRunScraper: {},
-        scraperId: "",
-        scrapersSnapshot: [],
+        name: "Full Scrape",
+        baseUrl: "https://",
+        requestType: 0,
+        runTags: [],
+        runActionList: [],
+        requiredLogin: {
+            "isLogin": false, "loginUrl": "",
+            "loginParams": DEFAULT_ITEMS.loginParams,"secondLoginParams": DEFAULT_ITEMS.loginParams,
+            "username": ["", ""], "password": ["", ""]
+        },
+        apiInfo: {apiUrlSchema: "https://", apiToken: ""}
+    },
+    "RunAction": {
+        id: "",
+        debugMode: true,
+        customRequestOptions: {},
+        actionSnapshot: {},
+        actionMapping: {},
+        initRun: {
+            runGroupDataName: "",
+            runGroupVariable: "",
+        }
+    },
+    "RunGroupData": {
+        runGroupId: "0",
         data: {},
     },
-    'WebScraper': {
-        name: 'New Scraper',
-        id: "",
-        type: 0,
-        baseUrl: "https://",
-        websiteName: "",
-        scrapeContainer: "",
-        hasApi: {apiUrlSchema: "https://", apiToken: ""},
-        scraperTags : [DEFAULT_FIELDS.tags()],
-        scraperUrls : [DEFAULT_FIELDS.scraperUrl()],
-    },
-    'Monitor': {
-        name: 'New Monitor',
-        id: "",
-        details: "",
-        type: 0,
-        baseUrl: "https://",
-        websiteName: "",
-        scrapers: [],
-        tasks: {}
-    },
-    'Task': {
-
-    }
-}
-
-
-export const URL_TABLE = (scraper) => {
-    return {
-        add: (i) => {
-            scraper.scraperUrls.splice(++i, 0, DEFAULT_FIELDS.scraperUrl());
-        },
-        remove: (i) => {
-            if (scraper.scraperUrls.length > 1) scraper.scraperUrls.splice(i, 1);
-        },
-        duplicate: (i, fields) => {
-            i++;scraper.scraperUrls.splice(i, 0, fields);
+    'TaskTypeAction': (defaultAction = 0) => {
+        const taskActionDefault = DEFAULT_ITEMS.actionTypeData[defaultAction];
+        // console.log(taskActionDefault);
+        return {
+            id: "0",
+            actionName: DEFAULT_ITEMS.actionNames[defaultAction],
+            actionTags: "",
+            action: defaultAction,
+            taskActionData: [taskActionDefault]
         }
-    };
-}
-
-export const UTILITIES = {
-    "DROP": (label, value, loc) => {return {label, value, loc, tog:"modal"};}
-}
-
-export const SCRAPER_TAG_TABLE = (scraper) => {
-    return {
-        add: (i) => {
-            scraper.scraperTags.splice(++i, 0, DEFAULT_FIELDS.tags());
-        },
-        remove: (i) => {
-            if (scraper.scraperTags.length > 1) scraper.scraperTags.splice(i, 1);
-        },
-        duplicate: (i, fields) => {
-            console.log(fields);
-            i++;scraper.scraperTags.splice(i, 0, fields);
-        }
-    };
+    },
 }

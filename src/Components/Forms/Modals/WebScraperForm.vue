@@ -8,9 +8,9 @@ import {BasicFileHandler} from "@/api/AsyncTools";
 import TagUrlRow from "@/Components/Forms/Rows/TagUrlRow.vue";
 import {nanoid} from "nanoid/non-secure";
 import {FileHandler} from "@/api/FileTools";
-import {DEFAULT_FIELDS, DEFAULT_OBJS, SCRAPER_TAG_TABLE, URL_TABLE} from "@/api/ObjTools";
+import {DEFAULT_ITEMS, DEFAULT_OBJS, SCRAPER_TAG_TABLE, TABLE_RULE} from "@/api/ObjTools";
 
-const msgr = DEFAULT_FIELDS.message();
+const msgr = DEFAULT_ITEMS.message();
 let saveWebScraper, scraperId, webScraper;
 
 const setDefaultScraper = () => {
@@ -18,7 +18,7 @@ const setDefaultScraper = () => {
   webScraper = ref(DEFAULT_OBJS.WebScraper);
 };
 
-//TODO: Remove Second Scrape Option and Add to the Scrape Itself.
+//TODO: Add a login feature for dashboard and dealer portals
 
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -43,7 +43,6 @@ if (props.sid > 0 && props.sid !== "") {
 
 const saveAndRunScraper = await ref(function () {
   saveWebScraper.value();
-  isRunning.value = true;
 });
 
 
@@ -94,13 +93,6 @@ const saveAndRunScraper = await ref(function () {
 
       </div>
       <div class="col-12">
-        <hr>
-        <div class="form-check">
-          <input type="checkbox" class="form-check-input" id="scraper-has-first-scrape" v-model="webScraper.secondaryScrape.isSecondaryScraper">
-          <label class="form-check-label" for="scraper-has-first-scrape">Does this scraper have an initial scrape that it looks to run from.</label>
-        </div>
-      </div>
-      <div class="col-12">
         <h4>Urls to Scrape</h4>
         <table class="table table-striped table-bordered">
           <thead><tr><th>Urls [Can Be Comma Separated]</th><th>Tags</th><th>Options</th></tr></thead>
@@ -110,9 +102,9 @@ const saveAndRunScraper = await ref(function () {
               v-model:urls="item.urls"
               v-model:tags="item.tags"
               :key="index"
-              @add-row="URL_TABLE(webScraper).add"
-              @remove-row="URL_TABLE(webScraper).remove"
-              @duplicate-row="URL_TABLE(webScraper).duplicate"
+              @add-row="TABLE_RULE(webScraper).add"
+              @remove-row="TABLE_RULE(webScraper).remove"
+              @duplicate-row="TABLE_RULE(webScraper).duplicate"
           ></BasicUrlScraperRow>
           </tbody>
         </table>

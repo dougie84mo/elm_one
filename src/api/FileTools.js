@@ -1,11 +1,10 @@
+/* eslint-disable */
 import path from "path";
-import fs, {createWriteStream} from "fs";
-import Axios from "axios";
-import {TEMPUS} from "@/api/AsyncTools";
-
-
-
-
+import fs from "fs";
+import {run} from "@babel/core/lib/transformation";
+import {ELMFILE} from "@/api/AsyncTools";
+// import Axios from "axios";
+// import {TEMPUS} from "@/api/AsyncTools";
 
 export class FileHandler {
     static ASSET_DIRECTORY = "../../../../../../../../assets/";
@@ -19,14 +18,14 @@ export class FileHandler {
         return path.join(__dirname, FileHandler.ASSET_DIRECTORY, FileHandler.C, fileName);
     }
 
-    static getScrapersJson() {
+    static getTaskActionsFileJson() {
         return SYNC_ELMFILE.ReadFileToJson(FileHandler.getConfigFile('scrapers.json'));
     }
 
     static getScraperJson(id) {
-        const scrapers =  FileHandler.getScrapersJson();
+        const scrapers =  FileHandler.getTaskActionsFileJson();
         // eslint-disable-next-line no-prototype-builtins
-        return typeof scrapers === "object" && scrapers.hasOwnProperty(id) ? scrapers[id] : false;
+        return typeof scrapers === "object" && scrapers.hasOwnProperty(id) ? scrapers[id] : {};
     }
 
     static saveNewScraperRun(id, fileConfig) {
@@ -39,8 +38,23 @@ export class FileHandler {
 
     static getScraperRunInfo(id) {
         const runsFileName = FileHandler.getRunsDirectory(`${id}.json`);
-        const runsFileDirectory = FileHandler.getRunsDirectory(id);
+        // const runsFileDirectory = FileHandler.getRunsDirectory(id);
 
+        return SYNC_ELMFILE.ReadFileToJson(runsFileName);
+    }
+
+    static async addToTaskActionFile(scraperArray) {
+        let oldFileInfo = FileHandler.getTaskActionsFileJson();
+        if (scraperArray.hasOwnProperty("id") && oldFileInfo.hasOwnProperty(scraperArray.id)) {
+            // if (oldFileInfo.hasOwnProperty(scraperArray.id)) {
+            // } else {
+            //     oldFileInfo[]
+            // }
+            oldFileInfo[scraperArray.id] = scraperArray;
+            await ELMFILE.WriteToJsonFile(oldFileInfo, FileHandler.getConfigFile('scrapers.json'))
+        } else {
+            console.error("Error in adding a task action")
+        }
     }
 }
 
@@ -58,9 +72,10 @@ export const SYNC_ELMFILE = {
     "CreateDir": (dir, isDebug=false) => {
         try {
             fs.mkdirSync(dir, { recursive: true });
-            console.log(`Creating directory ${dir}`)
+            if (isDebug) console.log(`Creating directory ${dir}`);
             return true;
         } catch (e) {
+            if (isDebug) console.error(e);
             return false;
         }
     },
@@ -69,6 +84,7 @@ export const SYNC_ELMFILE = {
             fs.accessSync(dir, fs.constants.F_OK);
             return true;
         } catch (err) {
+            if (isDebug) console.error(err);
             return false;
         }
     }

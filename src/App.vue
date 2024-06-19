@@ -2,41 +2,20 @@
 <!--  <img alt="Vue logo" src="./assets/logo.png">-->
   <div class="container-fluid m-2">
   <ApplicationTabs>
-      <ApplicationTab title="Scrapers">
+      <ApplicationTab title="Task Actions">
         <Suspense>
-          <ScrapersPage></ScrapersPage>
+          <TaskActionPage></TaskActionPage>
         </Suspense>
       </ApplicationTab>
-      <ApplicationTab title="Monitors">
-        <MonitorsPage></MonitorsPage>
-      </ApplicationTab>
-      <ApplicationTab title="Raffles">
-        <RafflesPage></RafflesPage>
-      </ApplicationTab>
       <ApplicationTab title="Runs">
-        Runs Page
+        Tasks
       </ApplicationTab>
       <ApplicationTab title="Tasks">
         Tasks
       </ApplicationTab>
-      <ApplicationTab title="Proxies">
-        <div class="row">
-          <div class="col-md-7"><h2>Proxy Groups</h2></div>
-          <div class="col-md-5">
-            <div class="btn-group">
-              <button class="btn btn-success">Add</button>
-              <button class="btn btn-secondary">Edit</button>
-            </div>
-          </div>
-        </div>
-        <table>
-          <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
-          </tr>
-        </table>
+      <ApplicationTab title="Profiling">
+        Add Profile Groups and Auto generate profiles
+<!--        <ProfilingPage> </ProfilingPage>-->
       </ApplicationTab>
       <ApplicationTab title="Settings">
         <SettingsPage></SettingsPage>
@@ -49,9 +28,9 @@
 import ApplicationTab from "@/Components/ApplicationTab.vue";
 import ApplicationTabs from "@/Components/ApplicationTabs.vue";
 import SettingsPage from "@/Pages/SettingsPage.vue";
-import ScrapersPage from "@/Pages/ScrapersPage.vue";
-import RafflesPage from "@/Pages/RafflesPage.vue";
-import MonitorsPage from "@/Pages/MonitorsPage.vue";
+// import ProfilingPage from "@/Pages/ProfilingPage.vue";
+import TaskActionPage from "@/Pages/TaskActionPage.vue";
+// import RunsPage from "@/Pages/RunsPage.vue";
 
 // const ActiveTabs = [true, false, false];
 //

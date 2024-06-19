@@ -6,7 +6,7 @@
   <td><input type="text" class="form-control form-control-sm" :value="tags" @input="$emit('update:tags', $event.target.value)"></td>
   <td>
     <div class="btn-group">
-    <button class="btn btn-success" @click="addRow(myKey)"><i class="fa fa-plus"></i></button>
+    <button class="btn btn-success" @click="addBaseRow(myKey)"><i class="fa fa-plus"></i></button>
     <button class="btn btn-danger" @click="removeRow(myKey)"><i class="fa fa-minus"></i></button>
     <button class="btn btn-secondary" @click="duplicateRow(myKey, {urls, tags})"><i class="fa fa-copy"></i></button>
     </div>
@@ -29,7 +29,7 @@ const props = defineProps({
 });
 
 const myKey = component.vnode.key;
-const addRow = ref(function (index) {emit('addRow', index);});
+const addBaseRow = ref(function (index) {/*console.log(index, "Something");*/emit('addRow', index);});
 const removeRow = ref(function (index) {emit('removeRow', index);});
 const duplicateRow = ref(function (index, fields) {
   emit('duplicateRow', index, fields);

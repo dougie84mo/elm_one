@@ -1,32 +1,33 @@
 <script setup>
+isRunning.value = true;
+/* eslint-disable no-unused-vars,no-undef */
 import {ref} from "vue";
 import ModalHeader from "@/Components/Reusables/ModalHeader.vue";
 import ModalFooter from "@/Components/Reusables/ModalFooter.vue";
 // import {nanoid} from "nanoid/non-secure";
 import {FileHandler} from "@/api/FileTools";
-import {DEFAULT_FIELDS, DEFAULT_OBJS, SCRAPER_TAG_TABLE} from "@/api/ObjTools";
+import {DEFAULT_ITEMS, DEFAULT_OBJS, SCRAPER_TAG_TABLE} from "@/api/ObjTools";
 import RunScraperTag from "@/Components/Forms/Rows/RunScraperTag.vue";
 import RunScraperUrl from "@/Components/Forms/Rows/RunScraperUrl.vue";
-import {BasicFileHandler} from "@/api/AsyncTools";
 import {nanoid} from "nanoid/non-secure";
 
-const msgr = DEFAULT_FIELDS.message();
+const msgr = DEFAULT_ITEMS.message();
 let runScraper, scraperId, webScraper, webScraperSecondary=null;
 
 // TODO: each scraper gets its own id , directory with all there runs and config file with the name of the file being the id
+const props = defineProps({
+  rScrapeId: {type: [String,Number], default: ""},
+});
 const setDefaultScraper = () => {
   scraperId = nanoid();
   runScraper = ref(DEFAULT_OBJS.WebScraper);
 };
 
 if (props.rScrapeId > 0 && props.rScrapeId !== "") {
-  runScraper = FileHandler.get
+  runScraper = FileHandler.getScraperRunInfo(props.rScrapeId);
 }
 
 // eslint-disable-next-line no-undef,no-unused-vars
-const props = defineProps({
-  rScrapeId: {type: [String,Number], default: ""},
-});
 saveScraperRun = ref(async function () {
   if (props.rScrapeId > 0 && props.rScrapeId !== "") {
     FileHandler.saveNewScraperRun(scraperId, runScraper.value);
@@ -37,12 +38,10 @@ saveScraperRun = ref(async function () {
 // (async () => {
 //
 // })();
-const isRunning = ref(props.isRunning);
-
+const isRunning = ref(false);
 const saveAndRunScraper = await ref(function () {
   runScraper.value();
   // let monthYear = new Date();
-  isRunning.value = true;
 });
 
 const selectAll = ref((scraper, arrType) => {

@@ -2,13 +2,16 @@
 import {getCurrentInstance, ref} from "vue";
 const component = getCurrentInstance();
 const scraperId = component.vnode.key;
-console.log(scraperId);
+// console.log(scraperId);
+
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
   name: {type: String, required: true},
   isRunning: {type: [Boolean, String], default: false},
   scraper: {type: [Object], required: true}
 });
+
+// TODO : swap id for scraper and get scraper for each instance?
 
 // eslint-disable-next-line no-undef,vue/valid-define-emits
 const emit = defineEmits(['handleEditSelect', 'copyScraperPrompt']);
@@ -64,11 +67,11 @@ if (currentlyRunning.value === true) {
 // const currentCollapseOpen = ref(false);
 // const inTransition = ref(false);
 
-const stopScrapeEvent = ref(async function() {
-  // console.log("Some timeout event");
-  disabledButtons.value.stop = true;
-  currentlyRunning.value = false;
-});
+// const stopScrapeEvent = ref(async function() {
+//   // console.log("Some timeout event");
+//   disabledButtons.value.stop = true;
+//   currentlyRunning.value = false;
+// });
 
 const handleEditSelect = function () {
   let value = props.scraper.type === 0 ? 'add_web_scraper' : "add_api_scraper";
@@ -83,16 +86,17 @@ const handleEditSelect = function () {
 <template>
 <tr>
   <td>{{name}}</td>
-  <td></td>
   <td>
-    <span class="scraper-run-not-running" v-if="currentlyRunning !== true">
-      <span class="pe-2" v-html="boundHtml"></span>
-      <button class="btn btn-secondary" @click="runScraperEvent()" :disabled="disabledButtons.run">Run</button>
-    </span>
-    <span class="scraper-run-container" v-else>
-      <span class="pe-2" v-html="boundHtml"></span>
-      <button class="btn btn-danger" @click="stopScrapeEvent()" :disabled="disabledButtons.stop">Stop</button>
-    </span>
+    <p>Type: {{}}</p>
+
+<!--    <span class="scraper-run-not-running" v-if="currentlyRunning !== true">-->
+<!--      <span class="pe-2" v-html="boundHtml"></span>-->
+<!--      <button class="btn btn-secondary" @click="runScraperEvent()" :disabled="disabledButtons.run">Run</button>-->
+<!--    </span>-->
+<!--    <span class="scraper-run-container" v-else>-->
+<!--      <span class="pe-2" v-html="boundHtml"></span>-->
+<!--      <button class="btn btn-danger" @click="stopScrapeEvent()" :disabled="disabledButtons.stop">Stop</button>-->
+<!--    </span>-->
 
   </td>
   <td>

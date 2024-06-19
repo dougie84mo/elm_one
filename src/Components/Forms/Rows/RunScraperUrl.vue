@@ -10,11 +10,11 @@
 
 <script setup>
 // import {getCurrentInstance, inject, ref, watchEffect} from "vue";
-import {getCurrentInstance, ref} from "vue";
+// import {getCurrentInstance, ref} from "vue";
 
 // const currentArrayRow =
-const component = getCurrentInstance();
-// eslint-disable-next-line no-undef
+// const component = getCurrentInstance();
+// eslint-disable-next-line no-undef,no-unused-vars
 const emit = defineEmits(['checking-row', 'unchecking-row', 'update:checked']);
 // eslint-disable-next-line no-undef,no-unused-vars
 const props = defineProps({
@@ -22,7 +22,7 @@ const props = defineProps({
   tags: {type: String, default: ''}
 });
 
-const myKey = component.vnode.key;
-const addRow = ref(function (index) {emit('checking-row', index);});
-const removeRow = ref(function (index) {emit('unchecking-row', index);});
+// const myKey = component.vnode.key;
+// const addRow = ref(function (index) {emit('checking-row', index);});
+// const removeRow = ref(function (index) {emit('unchecking-row', index);});
 </script>

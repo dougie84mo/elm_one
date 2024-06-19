@@ -8,9 +8,9 @@ import {BasicFileHandler} from "@/api/AsyncTools";
 import TagUrlRow from "@/Components/Forms/Rows/TagUrlRow.vue";
 import {nanoid} from "nanoid/non-secure";
 import {FileHandler} from "@/api/FileTools";
-import {DEFAULT_FIELDS, DEFAULT_OBJS, SCRAPER_TAG_TABLE, URL_TABLE} from "@/api/ObjTools";
+import {DEFAULT_ITEMS, DEFAULT_OBJS, SCRAPER_TAG_TABLE, TABLE_RULE} from "@/api/ObjTools";
 
-const msgr = DEFAULT_FIELDS.message();
+const msgr = DEFAULT_ITEMS.message();
 let saveWebScraper, scraperId, webScraper;
 
 const setDefaultScraper = () => {
@@ -113,9 +113,9 @@ const stopRun = ref(() => {
               v-model:urls="item.urls"
               v-model:tags="item.tags"
               :key="index"
-              @add-row="URL_TABLE(webScraper).add"
-              @remove-row="URL_TABLE(webScraper).remove"
-              @duplicate-row="URL_TABLE(webScraper).duplicate"
+              @add-row="TABLE_RULE(webScraper).add"
+              @remove-row="TABLE_RULE(webScraper).remove"
+              @duplicate-row="TABLE_RULE(webScraper).duplicate"
           ></BasicUrlScraperRow>
           </tbody>
         </table>
